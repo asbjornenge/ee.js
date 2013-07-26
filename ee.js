@@ -22,10 +22,10 @@
      */
     var emit = function (name, self) {
         var args = [].slice.call(arguments, 2);
-        if (name) run(this, this._ee[name], self, args);
-        else for (name in this._ee)
-            if (this._ee.hasOwnProperty(name))
-                run(this, this._ee[name], self, args);
+        if (name) run(this, this.ee[name], self, args);
+        else for (name in this.ee)
+            if (this.ee.hasOwnProperty(name))
+                run(this, this.ee[name], self, args);
         return this;
     };
 
@@ -42,8 +42,8 @@
         if (!name || !fn || this.has(name, fn)) return this;
         var args = [].slice.call(arguments, 4);
         var e = { n: n, name: name, fn: fn, self: self, args: args };
-        if (this._ee[name]) this._ee[name].push(e);
-        else this._ee[name] = [e];
+        if (this.ee[name]) this.ee[name].push(e);
+        else this.ee[name] = [e];
         return this;
     };
 
@@ -55,12 +55,12 @@
      * @[fn]: The handler for this event.
      */
     var off = function (name, fn) {
-        if (typeof name === 'undefined') this._ee = {};
-        else if (typeof fn === 'undefined') this._ee[name] = [];
-        else if (!this._ee[name]) return this;
-        else for (var i = 0; i < this._ee[name].length; i++)
-            if (this._ee[name][i] && this._ee[name][i].fn === fn)
-                this._ee[name][i] = undefined;
+        if (typeof name === 'undefined') this.ee = {};
+        else if (typeof fn === 'undefined') this.ee[name] = [];
+        else if (!this.ee[name]) return this;
+        else for (var i = 0; i < this.ee[name].length; i++)
+            if (this.ee[name][i] && this.ee[name][i].fn === fn)
+                this.ee[name][i] = undefined;
         return this;
     };
 
@@ -71,10 +71,10 @@
      * @[fn]: Check if the listener has this handler.
      */
     var has = function(name, fn) {
-        if (!name || !this._ee[name]) return false;
+        if (!name || !this.ee[name]) return false;
         if (!fn) return true;
-        for (var i = 0; i < this._ee[name].length; i++)
-            if (this._ee[name][i] && this._ee[name][i].fn === fn)
+        for (var i = 0; i < this.ee[name].length; i++)
+            if (this.ee[name][i] && this.ee[name][i].fn === fn)
                 return true;
         return false;
     };
@@ -118,7 +118,7 @@
      */
     return function (obj) {
         obj = obj || {};
-        obj._ee = {};
+        obj.ee = {};
         obj.on = partial(times, null);
         obj.once = partial(times, 1);
         obj.times = times;

@@ -36,7 +36,7 @@ describe('ee.js', function() {
         assert.equal(c, 0);
     });
 
-    it('.off should ignore missing handlers', function() {
+    it('.off should ignore missing names', function() {
         e.emit('a'); e.emit('b'); e.emit();
         e.off('a'); e.off('d'); e.off(2);
         e.emit('a'); e.emit('b'); e.emit();
@@ -56,6 +56,17 @@ describe('ee.js', function() {
         assert.equal(x, 1);
         assert.equal(y, 2);
         assert.equal(z, 3);
+    });
+
+    it('.off should ignore missing handler', function() {
+        var hx = function() { x++; };
+        var hy = function() { y++; };
+        var hz = function() { z++; };
+        e.on('h1', hx); e.on('h2', hy); e.on('h3', hz); e.emit('h1'); e.emit('h2');
+        e.off('j', hx); e.off('i'); e.off('h3', hx); e.emit('h1'); e.emit('h2');
+        assert.equal(x, 2);
+        assert.equal(y, 2);
+        assert.equal(z, 0);
     });
 
     it('.on and .emit should keep this and args', function() {

@@ -57,6 +57,7 @@
     var off = function (name, fn) {
         if (typeof name === 'undefined') this._ee = {};
         else if (typeof fn === 'undefined') this._ee[name] = [];
+        else if (!this._ee[name]) return this;
         else for (var i = 0; i < this._ee[name].length; i++)
             if (this._ee[name][i] && this._ee[name][i].fn === fn)
                 this._ee[name][i] = undefined;

@@ -91,7 +91,7 @@
         if (events) for (var i = 0; i < events.length; i++) {
             var e = events[i];
             if (!e) continue;
-            if (e.n && --e.n < 1 && e.name) emitter.off(e.name);
+            if (e.n && --e.n < 1 && e.name) emitter.off(e.name, e.fn);
             if (e.fn) e.fn.apply(
                 self || e.self || emitter,
                 e.args.concat(args));

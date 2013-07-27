@@ -104,6 +104,14 @@ describe('ee.js', function() {
         assert.equal(d, 1);
     });
 
+    it('.once should remove by both name and handler', function() {
+        e.on('d', function() { x++; });
+        e.once('d', function() { y++; });
+        e.emit('d'); e.emit('d'); e.emit();
+        assert.equal(x, 3);
+        assert.equal(y, 1);
+    });
+
     it('.once should prevent infinite loops', function() {
         e.once('1', function() { e.emit('1'); x++; });
         e.emit('1');

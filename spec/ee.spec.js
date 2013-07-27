@@ -135,13 +135,14 @@ describe('ee.js', function() {
         assert.equal(e1.has('2'), true, 'b');
         assert.equal(e2.has('1'), true, 'c');
         assert.equal(e2.has('2'), false, 'd');
+        assert.equal(e2.has('1', f1), true, 'd');
+        assert.equal(e2.has('1', f2), false, 'd');
         assert.equal(e2.has('2', f2), false, 'd');
     });
 
     it('.on should not add duplicate handlers', function() {
         var e1 = ee(), f1 = function() { x++; };
-        e1.on('1', f1); e1.on('1', f1); e1.times(2, '1', f1);
-        e1.emit();
+        e1.on('1', f1).on('1', f1).times(2, '1', f1).emit();
         assert.equal(x, 1);
     });
 

@@ -82,18 +82,18 @@
     /*
      * Internal: Run a list of events on an emitter.
      *
-     * @emitter: The emitter to run the events on.
+     * @ee: The emitter to run the events on.
      * @events: An array of event objects.
      * @self: The this argument for the handlers.
      * @args: Extra arguments for the handlers.
      */
-    var run = function (emitter, events, self, args) {
+    var run = function (ee, events, self, args) {
         if (events) for (var i = 0; i < events.length; i++) {
             var e = events[i];
             if (!e) continue;
-            if (e.n && --e.n < 1 && e.name) emitter.off(e.name, e.fn);
+            if (e.n && --e.n < 1 && e.name) ee.off(e.name, e.fn);
             if (e.fn) e.fn.apply(
-                self || e.self || emitter,
+                self || e.self || ee,
                 e.args.concat(args));
         }
     };

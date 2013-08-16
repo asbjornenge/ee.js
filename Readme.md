@@ -1,6 +1,6 @@
 # ee.js
 
-It's not that the world needs yet another JavaScript event emitter, but they are fun to write, and this one comes with a few differentiating features. It's also tiny and works without any dependency on the browser or other libraries.
+It's not that the world needs yet another JavaScript event emitter, but they are fun to write, and this one comes with a few differentiating features. It's also works without any dependency on the browser or other libraries.
 
 * Handlers can be turned off by name, fn, or both.
 * Duplicate handlers with the same name and fn are ignored.

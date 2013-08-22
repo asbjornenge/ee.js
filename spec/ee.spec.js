@@ -175,23 +175,25 @@ describe('ee.js', function() {
     });
 
     it('ee should handle non-string names', function() {
-        var o1 = { a: 1 };
-        var f1 = function() { x++ };
+        var fx = function() { x++; };
+        var fy = function() { y++; };
+        var fk = function() { return 1; };
 
         e.on(1, function() { x++; }); e.emit(1);
         e.on(1.1, function() { x++; }); e.emit(1.1);
         e.on(true, function() { x++; }); e.emit(true);
-        e.on(o1, function() { x++; }); e.emit(o1);
-        e.on(f1, function() { x++; }); e.emit(f1);
+        e.on(fx, function() { x++; }); e.emit(fx);
+        e.on(fk, fy); e.emit(fk);
 
         e.on(0, function() { x++; });
         e.on(false, function() { x++; });
         e.on(undefined, function() { x++; });
 
-        assert.equal(x, 5);
+        assert.equal(y, 1);
+        assert.equal(x, 4);
         assert.equal(e.has(1), true);
         assert.equal(e.has(true), true);
-        assert.equal(e.has(f1), true);
+        assert.equal(e.has(fx), true);
         assert.equal(e.has(0), false);
         assert.equal(e.has(false), false);
     });

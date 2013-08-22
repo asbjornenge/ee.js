@@ -1,5 +1,3 @@
-/* global define, module */
-
 (function (root, factory) {
 
     /*
@@ -17,15 +15,15 @@
      * Without any arguments, all listeners are triggered.
      *
      * @[name]: The name of the listeners to trigger.
-     * @[self]: The this argument for the handler.
+     * @[context]: The context for the handler.
      * @[arguments...]: Extra arguments for the handler.
      */
-    var emit = function (name, self) {
+    var emit = function (name, context) {
         var args = [].slice.call(arguments, 2);
-        if (name) run(this, this.ee[name], self, args);
+        if (name) run(this, this.ee[name], context, args);
         else for (name in this.ee)
             if (this.ee.hasOwnProperty(name))
-                run(this, this.ee[name], self, args);
+                run(this, this.ee[name], context, args);
         return this;
     };
 
@@ -35,13 +33,13 @@
      * @n: The number of times the listener should be triggered.
      * @name: The name of the events to trigger.
      * @fn: The handler for this event.
-     * @[self]: The this argument for the handler.
+     * @[context]: The context for the handler.
      * @[arguments...]: Extra arguments for the handler.
      */
-    var times = function (n, name, fn, self) {
+    var times = function (n, name, fn, context) {
         if (!name || !fn || this.has(name, fn)) return this;
         var args = [].slice.call(arguments, 4);
-        var e = { n: n, name: name, fn: fn, self: self, args: args };
+        var e = { n: n, name: name, fn: fn, context: context, args: args };
         if (this.ee[name]) this.ee[name].push(e);
         else this.ee[name] = [e];
         return this;
@@ -65,18 +63,18 @@
     };
 
     /*
-     * Check if an event has listeners, or a specific handler.
+     * Get the number of attached handlers for an event.
      *
      * @name: The name of the listener.
      * @[fn]: Check if the listener has this handler.
      */
     var has = function(name, fn) {
-        if (!name || !this.ee[name]) return false;
-        if (!fn) return true;
+        if (!name || !this.ee[name]) return 0;
+        if (!fn) return this.ee[name].length;
         for (var i = 0; i < this.ee[name].length; i++)
             if (this.ee[name][i] && this.ee[name][i].fn === fn)
-                return true;
-        return false;
+                return 1;
+        return 0;
     };
 
     /*
@@ -84,16 +82,16 @@
      *
      * @ee: The emitter to run the events on.
      * @events: An array of event objects.
-     * @self: The this argument for the handlers.
+     * @context: The context for the handlers.
      * @args: Extra arguments for the handlers.
      */
-    var run = function (ee, events, self, args) {
+    var run = function (ee, events, context, args) {
         if (events) for (var i = 0; i < events.length; i++) {
             var e = events[i];
             if (!e) continue;
             if (e.n && --e.n < 1 && e.name) ee.off(e.name, e.fn);
             if (e.fn) e.fn.apply(
-                self || e.self || ee,
+                context || e.context || ee,
                 e.args.concat(args));
         }
     };

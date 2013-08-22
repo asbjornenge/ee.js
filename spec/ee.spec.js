@@ -126,18 +126,19 @@ describe('ee.js', function() {
         assert.equal(y, 1);
     });
 
-    it('.has should check if a name has handlers', function() {
+    it('.has should return the number of attached handlers', function() {
         var e1 = ee(), e2 = ee();
         var f1 = function() { x++; };
         var f2 = function() { y++; };
-        e1.on('1', f1).on('2', f2); e2.on('1', f1);
-        assert.equal(e1.has('1'), true, 'a');
-        assert.equal(e1.has('2'), true, 'b');
-        assert.equal(e2.has('1'), true, 'c');
-        assert.equal(e2.has('2'), false, 'd');
-        assert.equal(e2.has('1', f1), true, 'd');
-        assert.equal(e2.has('1', f2), false, 'd');
-        assert.equal(e2.has('2', f2), false, 'd');
+        var f3 = function() { z++; };
+        e1.on('1', f1).on('2', f2).on('2', f3); e2.on('1', f1);
+        assert.equal(e1.has('1'), 1, 'a');
+        assert.equal(e1.has('2'), 2, 'b');
+        assert.equal(e2.has('1'), 1, 'c');
+        assert.equal(e2.has('2'), 0, 'd');
+        assert.equal(e2.has('1', f1), 1, 'd');
+        assert.equal(e2.has('1', f2), 0, 'd');
+        assert.equal(e2.has('2', f2), 0, 'd');
     });
 
     it('.on should not add duplicate handlers', function() {
@@ -199,11 +200,13 @@ describe('ee.js', function() {
     });
 
     it('ee should handle many listeners', function() {
-        for(var i = 1; i < 201; i++) e.on(i, function() { x++; });
-        for(var j = 1; j < 201; j++) e.on(j, function() { x++; });
+        for(var i = 1; i < 2001; i++) e.on(i, function() { x++; });
+        for(var j = 1; j < 2001; j++) e.on(j, function() { x++; });
         e.emit(); e.emit(1);
-        assert.equal(e.has(2), true);
-        assert.equal(x, 402);
+        assert.equal(e.has(2), 2);
+        assert.equal(e.has(2000), 2);
+        assert.equal(e.has(4000), 0);
+        assert.equal(x, 4002);
     });
 
 });

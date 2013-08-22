@@ -28,7 +28,7 @@ It's not that the world needs yet another JavaScript event emitter, but they are
 
 ### .has(name, [fn])
 
-`.has` checks if there's a registered handler for an event name. Pass a function to see if the emitter has that function as a registered handler for this event.
+`.has` checks if there's a registered handler for an event name, and returns the number of registered handlers for this event. Pass a function to see if the emitter has that function as a registered this specific handler for the event.
 
 ### .off([name], [fn])
 

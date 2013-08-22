@@ -14,13 +14,14 @@ var e = ee();
 
 e.on('hello', function() { console.log('world'); })
  .on('world', function() { console.log('hello'); })
+ .on('world', function() { console.log('earth'); })
  .once('foo', function() { console.log('bar'); });
 
 e.emit('hello')  // => 'world'
- .emit('world'); // => 'hello'
+ .emit('world'); // => 'hello', 'earth'
 
 e.off('hello')
- .has('world');  // => 1
+ .has('world');  // => 2
 
 e.emit('foo')    // => 'bar'
  .has('foo');    // => 0

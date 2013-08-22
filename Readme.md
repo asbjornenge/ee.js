@@ -5,6 +5,28 @@ It's not that the world needs yet another JavaScript event emitter, but they are
 * Handlers can be turned off by name, fn, or both.
 * Duplicate handlers with the same name and fn are ignored.
 * Handlers added with `once` or `times` will not cause infinite loops.
+* Each emitter method returns the emitter to allow chaining.
+
+## Eexample
+
+```javascript
+var e = ee();
+
+e.on('hello', function() { console.log('world'); })
+ .on('world', function() { console.log('hello'); })
+ .once('foo', function() { console.log('bar'); });
+
+e.emit('hello')  // => 'world'
+ .emit('world'); // => 'hello'
+
+e.off('hello')
+ .has('world');  // => 1
+
+e.emit('foo')    // => 'bar'
+ .has('foo');    // => 0
+```
+
+## API
 
 ### ee([obj])
 
